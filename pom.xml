@@ -11,6 +11,7 @@
         <module>data-structure</module>
         <module>design-pattern</module>
         <module>guava</module>
+        <module>spring-webflux</module>
     </modules>
 
     <packaging>pom</packaging>
