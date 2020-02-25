@@ -12,6 +12,7 @@
         <module>design-pattern</module>
         <module>guava</module>
         <module>spring-webflux</module>
+        <module>spring-getstarted</module>
     </modules>
 
     <packaging>pom</packaging>
