@@ -1,5 +1,6 @@
 package com.duanndz.rabbitmq.controllers;
 
+import com.duanndz.rabbitmq.config.BookRabbitConfiguration;
 import com.duanndz.rabbitmq.config.RabbitConfiguration;
 import com.duanndz.rabbitmq.models.Message;
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +42,12 @@ public class RabbitController {
     public ResponseEntity<String> sendMessage(@RequestBody String message) {
         rabbitTemplate.convertAndSend(RabbitConfiguration.TOPIC_EXCHANGE_NAME, "springboot.rabbit.queue2", message);
         return ResponseEntity.ok(String.format("%s %s", "queue2", message));
+    }
+
+    @PostMapping("books")
+    public ResponseEntity<String> addBook(@RequestBody String name) {
+        rabbitTemplate.convertAndSend(BookRabbitConfiguration.BOOK_TOPIC_EXCHANGE, "book.add.name", name);
+        return ResponseEntity.ok(name);
     }
 
 }
