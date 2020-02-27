@@ -14,6 +14,7 @@
         <module>spring-webflux</module>
         <module>spring-getstarted</module>
         <module>springboot-rabbitmq</module>
+        <module>java-rabbitmq</module>
     </modules>
 
     <packaging>pom</packaging>
