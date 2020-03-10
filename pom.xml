@@ -16,6 +16,7 @@
         <module>springboot-rabbitmq</module>
         <module>java-rabbitmq</module>
         <module>java-jetty</module>
+        <module>java-core</module>
     </modules>
 
     <packaging>pom</packaging>
