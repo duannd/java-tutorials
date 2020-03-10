@@ -15,6 +15,7 @@
         <module>spring-getstarted</module>
         <module>springboot-rabbitmq</module>
         <module>java-rabbitmq</module>
+        <module>java-jetty</module>
     </modules>
 
     <packaging>pom</packaging>
@@ -23,7 +24,7 @@
         <java.version>11</java.version>
         <maven.compiler.target>11</maven.compiler.target>
         <maven.compiler.source>11</maven.compiler.source>
-        <spring.boot.version>2.2.4.RELEASE</spring.boot.version>
+        <spring.boot.version>2.2.5.RELEASE</spring.boot.version>
         <springfox-swagger.version>2.9.2</springfox-swagger.version>
         <com.google.guava.version>28.2-jre</com.google.guava.version>
     </properties>
@@ -72,6 +73,7 @@
                 <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${spring.boot.version}</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>

@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <name>Spring Getting Started</name>
+    <name>spring-getting-started</name>
     <artifactId>spring-getstarted</artifactId>
 
     <properties>
