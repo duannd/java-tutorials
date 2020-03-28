@@ -25,8 +25,8 @@ public class JettyServer {
 
         // register the BlockingServlet class in the ServletHandler object
         ServletHandler servletHandler = new ServletHandler();
-        servletHandler.addServletWithMapping(BlockingServlet.class, "/status");
-        servletHandler.addServletWithMapping(AsyncServlet.class, "/heavy/async");
+        servletHandler.addServletWithMapping(BlockingServlet.class, "/api/v1/status");
+        servletHandler.addServletWithMapping(AsyncServlet.class, "/api/v1/heavy/async");
 
         // Add ServletHandler to server
         server.setHandler(servletHandler);
