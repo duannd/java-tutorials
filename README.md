@@ -1,2 +1,6 @@
 # java-tutorials
-Java Core, Java Design Patterns, Data Structure and Algorithms
+    examples of Java Technologies.
+    
+## Data Structure
+example about [data structures](./data-structure/README.md)
+

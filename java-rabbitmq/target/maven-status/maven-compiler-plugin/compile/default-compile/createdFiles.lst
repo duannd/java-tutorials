@@ -1,5 +1,0 @@
-com/duanndz/rabbitmq/Publisher.class
-com/duanndz/rabbitmq/Consumer.class
-com/duanndz/rabbitmq/workers/Worker.class
-com/duanndz/rabbitmq/workers/Tasks.class
-com/duanndz/rabbitmq/RabbitUtils.class

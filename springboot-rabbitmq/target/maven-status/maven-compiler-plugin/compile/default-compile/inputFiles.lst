@@ -1,7 +1,0 @@
-/Users/duan.nguyen/Documents/MY/java-tutorials/springboot-rabbitmq/src/main/java/com/duanndz/rabbitmq/RabbitMQApplication.java
-/Users/duan.nguyen/Documents/MY/java-tutorials/springboot-rabbitmq/src/main/java/com/duanndz/rabbitmq/config/BookRabbitConfiguration.java
-/Users/duan.nguyen/Documents/MY/java-tutorials/springboot-rabbitmq/src/main/java/com/duanndz/rabbitmq/controllers/RabbitController.java
-/Users/duan.nguyen/Documents/MY/java-tutorials/springboot-rabbitmq/src/main/java/com/duanndz/rabbitmq/controllers/Receiver.java
-/Users/duan.nguyen/Documents/MY/java-tutorials/springboot-rabbitmq/src/main/java/com/duanndz/rabbitmq/controllers/BookReceiver.java
-/Users/duan.nguyen/Documents/MY/java-tutorials/springboot-rabbitmq/src/main/java/com/duanndz/rabbitmq/config/RabbitConfiguration.java
-/Users/duan.nguyen/Documents/MY/java-tutorials/springboot-rabbitmq/src/main/java/com/duanndz/rabbitmq/models/Message.java
