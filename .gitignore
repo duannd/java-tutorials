@@ -145,4 +145,4 @@ Desktop.ini
 ######################
 .eslintcache
 
-*/target/maven-archiver/
+*/target/*
