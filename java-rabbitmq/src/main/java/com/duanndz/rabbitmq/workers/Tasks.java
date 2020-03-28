@@ -1,6 +1,8 @@
 package com.duanndz.rabbitmq.workers;
 
 import com.duanndz.rabbitmq.RabbitUtils;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.MessageProperties;
 
@@ -15,8 +17,8 @@ public class Tasks {
         System.out.println("Running task starting. Please enter 'exit' to exit program.");
         Scanner scanner = new Scanner(System.in);
         ConnectionFactory factory = RabbitUtils.getConnectionFactory();
-        var connection = factory.newConnection();
-        var channel = connection.createChannel();
+        Connection connection = factory.newConnection();
+        Channel channel = connection.createChannel();
         channel.queueDeclare(TASK_QUEUE_NAME, false, false, false, null);
         while (true) {
             String message = scanner.nextLine();

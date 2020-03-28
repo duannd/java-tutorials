@@ -1,0 +1,7 @@
+com/duanndz/rabbitmq/config/BookRabbitConfiguration.class
+com/duanndz/rabbitmq/controllers/BookReceiver.class
+com/duanndz/rabbitmq/config/RabbitConfiguration.class
+com/duanndz/rabbitmq/RabbitMQApplication.class
+com/duanndz/rabbitmq/models/Message.class
+com/duanndz/rabbitmq/controllers/RabbitController.class
+com/duanndz/rabbitmq/controllers/Receiver.class

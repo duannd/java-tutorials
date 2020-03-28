@@ -9,8 +9,8 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <name>spring-getting-started</name>
-    <artifactId>spring-getstarted</artifactId>
+    <name>springboot-getstarted</name>
+    <artifactId>springboot-getstarted</artifactId>
 
     <properties>
         <java.version>11</java.version>

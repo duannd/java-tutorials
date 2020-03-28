@@ -26,7 +26,7 @@ public class RabbitConfiguration {
     @Bean
     public MessageListenerAdapter listenerAdapter(Receiver receiver) {
         log.info("Initial Message Listener adapter");
-        var messageListener = new MessageListenerAdapter(receiver);
+        MessageListenerAdapter messageListener = new MessageListenerAdapter(receiver);
         messageListener.addQueueOrTagToMethodName(QUEUE_NAME, "receiveMessage");
         messageListener.addQueueOrTagToMethodName(QUEUE_NAME_2, "receiveMessage2");
         return messageListener;

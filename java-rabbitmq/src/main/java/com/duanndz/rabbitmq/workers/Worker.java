@@ -1,6 +1,8 @@
 package com.duanndz.rabbitmq.workers;
 
 import com.duanndz.rabbitmq.RabbitUtils;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
 import org.slf4j.Logger;
@@ -15,8 +17,8 @@ public class Worker {
     public static void main(String[] args) throws Exception {
         log.info("[*] Waiting for messages. To exit press CTRL+C");
         ConnectionFactory factory = RabbitUtils.getConnectionFactory();
-        var connection = factory.newConnection();
-        var channel = connection.createChannel();
+        Connection connection = factory.newConnection();
+        Channel channel = connection.createChannel();
         channel.queueDeclare(Tasks.TASK_QUEUE_NAME, false, false, false, null);
 
         DeliverCallback callback = (consumerTag, delivery) -> {
