@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Getter
 public class ProcessingThread implements Runnable {
 
-    private volatile AtomicInteger count = new AtomicInteger(0);
+    private AtomicInteger count = new AtomicInteger(0);
     private final Object mutex = new Object();
 
     @Override
