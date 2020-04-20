@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
 import java.security.Security;
 import java.util.Base64;
@@ -33,8 +32,8 @@ public final class PGPHelper {
         }
     }
 
-    private PGPSecretKeyRingCollection pgpSec;
-    private char[] password;
+    // private PGPSecretKeyRingCollection pgpSec;
+    private PGPPrivateKey myPgpPrivateKey;
     private PGPSignatureGenerator mySignatureGenerator;
     private PGPPublicKey partnerPublicKey;
 
@@ -60,28 +59,27 @@ public final class PGPHelper {
             }
 
             // Step 2: parse my pgp private key
-            this.pgpSec = new PGPSecretKeyRingCollection(PGPUtil.getDecoderStream(priStream));
-            this.password = myPassPhrase.toCharArray();
-            PGPPrivateKey myPGPPrivateKey = null;
+            PGPSecretKeyRingCollection pgpSec = new PGPSecretKeyRingCollection(PGPUtil.getDecoderStream(priStream));
+            char[] password = myPassPhrase.toCharArray();
             PGPPublicKey myPGPPublicKey = null;
-            while (this.pgpSec.getKeyRings().hasNext()) {
-                Object readData = this.pgpSec.getKeyRings().next();
+            while (pgpSec.getKeyRings().hasNext()) {
+                Object readData = pgpSec.getKeyRings().next();
                 if (readData instanceof PGPSecretKeyRing) {
                     PGPSecretKeyRing pbr = (PGPSecretKeyRing) readData;
                     PGPSecretKey myPgpSecretKey = pbr.getSecretKey();
-                    myPGPPrivateKey = myPgpSecretKey.extractPrivateKey(password, BOUNCY_CASTLE_PROVIDER);
+                    this.myPgpPrivateKey = myPgpSecretKey.extractPrivateKey(password, BOUNCY_CASTLE_PROVIDER);
                     myPGPPublicKey = myPgpSecretKey.getPublicKey();
                     break;
                 }
             }
 
             // Step 3: generate my pgp signature generator
-            if (myPGPPrivateKey == null || myPGPPublicKey == null) {
+            if (this.myPgpPrivateKey == null || myPGPPublicKey == null) {
                 throw new Exception("My PGP Key pair is invalid");
             }
             int algorithm = myPGPPublicKey.getAlgorithm();
             PGPSignatureGenerator generator = new PGPSignatureGenerator(algorithm, HASH_ALGORITHM_TAGS, BOUNCY_CASTLE_PROVIDER);
-            generator.initSign(PGPSignature.BINARY_DOCUMENT, myPGPPrivateKey);
+            generator.initSign(PGPSignature.BINARY_DOCUMENT, this.myPgpPrivateKey);
             String userId = (String) myPGPPublicKey.getUserIDs().next();
             PGPSignatureSubpacketGenerator spGen = new PGPSignatureSubpacketGenerator();
             spGen.setSignerUserID(false, userId);
@@ -101,14 +99,6 @@ public final class PGPHelper {
         return INSTANCE;
     }
 
-    private PGPPrivateKey findSecretKey(long keyID) throws PGPException, NoSuchProviderException {
-        PGPSecretKey pgpSecKey = pgpSec.getSecretKey(keyID);
-        if (pgpSecKey == null) {
-            return null;
-        }
-        return pgpSecKey.extractPrivateKey(password, "BC");
-    }
-
     // Used partner publicKey to encrypt data.
     public String encrypt(byte[] data) throws Exception {
         try (ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -117,16 +107,15 @@ public final class PGPHelper {
 
             // compress data
             PGPCompressedDataGenerator comData = new PGPCompressedDataGenerator(PGPCompressedDataGenerator.ZIP);
-            try {
-                PGPLiteralDataGenerator lData = new PGPLiteralDataGenerator();
-                OutputStream pOut = lData.open(comData.open(bOut), PGPLiteralData.BINARY, "temp", data.length, new Date());
+            PGPLiteralDataGenerator lData = new PGPLiteralDataGenerator();
+            try (OutputStream pOut = lData.open(comData.open(bOut), PGPLiteralData.BINARY, "temp", data.length, new Date())) {
                 pOut.write(data);
             } finally {
                 comData.close();
             }
 
             // Encrypt data
-            PGPEncryptedDataGenerator cPk = new PGPEncryptedDataGenerator(PGPEncryptedDataGenerator.CAST5, new SecureRandom(), "BC");
+            PGPEncryptedDataGenerator cPk = new PGPEncryptedDataGenerator(PGPEncryptedDataGenerator.CAST5, new SecureRandom(), BOUNCY_CASTLE_PROVIDER);
             cPk.addMethod(partnerPublicKey);
             byte[] bytes = bOut.toByteArray();
             try (OutputStream cOut = cPk.open(dataOutputStream, bytes.length)) {
@@ -148,19 +137,9 @@ public final class PGPHelper {
         } else {
             enc = (PGPEncryptedDataList) pgpF.nextObject();
         }
-        Iterator it = enc.getEncryptedDataObjects();
-        PGPPrivateKey privateKey = null;
-        PGPPublicKeyEncryptedData publicKeyEncryptedData = null;
-        while (privateKey == null && it.hasNext()) {
-            publicKeyEncryptedData = (PGPPublicKeyEncryptedData) it.next();
-            privateKey = findSecretKey(publicKeyEncryptedData.getKeyID());
-        }
+        PGPPublicKeyEncryptedData publicKeyEncryptedData = (PGPPublicKeyEncryptedData) enc.getEncryptedDataObjects().next();
 
-        if (privateKey == null) {
-            throw new IllegalArgumentException("secret key for message not found.");
-        }
-
-        InputStream clear = publicKeyEncryptedData.getDataStream(privateKey, "BC");
+        InputStream clear = publicKeyEncryptedData.getDataStream(this.myPgpPrivateKey, BOUNCY_CASTLE_PROVIDER);
         PGPObjectFactory plainFact = new PGPObjectFactory(clear);
         Object message = plainFact.nextObject();
         if (message instanceof PGPCompressedData) {

@@ -22,13 +22,18 @@ public class CryptoMain {
         PGPHelper.init(partnerPublicKey, myPrivateKeyFilePath, "123456");
 
         // Crypt data
-        String plainText = "Duan Nguyen Dinh";
-        String encryptedDataInBase64 = PGPHelper.getInstance().encrypt(plainText.getBytes(StandardCharsets.UTF_8));
-        LOGGER.info("Encrypt {} == \n{}", plainText, encryptedDataInBase64);
+        String plainText = "Duan Nguyen Dinh at ";
 
-        // Decrypt data
-        String decryptedData = PGPHelper.getInstance().decrypt(Base64.getDecoder().decode(encryptedDataInBase64));
-        LOGGER.info("Decrypted Data: {}", decryptedData);
+        for (int i = 0; i < 2; i++) {
+            String data = plainText + System.currentTimeMillis();
+            String encryptedDataInBase64 = PGPHelper.getInstance().encrypt(data.getBytes(StandardCharsets.UTF_8));
+            LOGGER.info("Encrypt {} == \n{}", data, encryptedDataInBase64);
+
+            // Decrypt data
+            String decryptedData = PGPHelper.getInstance().decrypt(Base64.getDecoder().decode(encryptedDataInBase64));
+            LOGGER.info("DecryptedData: {}, equals data: {}", decryptedData, data.equals(decryptedData));
+        }
+
     }
 
 }
