@@ -11,7 +11,6 @@ import java.security.SecureRandom;
 import java.security.Security;
 import java.util.Base64;
 import java.util.Date;
-import java.util.Iterator;
 
 /**
  * Created By duan.nguyen at 4/20/20 6:26 PM
@@ -20,7 +19,7 @@ public final class PGPHelper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PGPHelper.class);
     private static PGPHelper INSTANCE;
-    private static final int BUFFER_SIZE = 1 << 16; // should always be power of 2 (one shifted bitwise 16 places)
+    // private static final int BUFFER_SIZE = 1 << 16; // should always be power of 2 (one shifted bitwise 16 places)
     private static final String BOUNCY_CASTLE_PROVIDER = "BC";
     private static final int HASH_ALGORITHM_TAGS = HashAlgorithmTags.SHA256;
 
@@ -43,12 +42,10 @@ public final class PGPHelper {
             // Step 1: parse partner public key
             PGPPublicKeyRingCollection publicSpec = new PGPPublicKeyRingCollection(PGPUtil.getDecoderStream(pubStream));
             PGPPublicKeyRing pkRing;
-            Iterator it = publicSpec.getKeyRings();
-            while (it.hasNext()) {
+            while (publicSpec.getKeyRings().hasNext()) {
                 pkRing = (PGPPublicKeyRing) publicSpec.getKeyRings().next();
-                Iterator pkIt = pkRing.getPublicKeys();
-                while (pkIt.hasNext()) {
-                    PGPPublicKey key = (PGPPublicKey) pkIt.next();
+                while (pkRing.getPublicKeys().hasNext()) {
+                    PGPPublicKey key = (PGPPublicKey) pkRing.getPublicKeys().next();
                     if (key.isEncryptionKey()) {
                         partnerPublicKey = key;
                         break;
@@ -103,7 +100,7 @@ public final class PGPHelper {
     public String encrypt(byte[] data) throws Exception {
         try (ByteArrayOutputStream out = new ByteArrayOutputStream();
              OutputStream dataOutputStream = new DataOutputStream(out);
-             ByteArrayOutputStream bOut = new ByteArrayOutputStream()){
+             ByteArrayOutputStream bOut = new ByteArrayOutputStream()) {
 
             // compress data
             PGPCompressedDataGenerator comData = new PGPCompressedDataGenerator(PGPCompressedDataGenerator.ZIP);
@@ -115,7 +112,8 @@ public final class PGPHelper {
             }
 
             // Encrypt data
-            PGPEncryptedDataGenerator cPk = new PGPEncryptedDataGenerator(PGPEncryptedDataGenerator.CAST5, new SecureRandom(), BOUNCY_CASTLE_PROVIDER);
+            PGPEncryptedDataGenerator cPk = new PGPEncryptedDataGenerator(PGPEncryptedDataGenerator.CAST5,
+                new SecureRandom(), BOUNCY_CASTLE_PROVIDER);
             cPk.addMethod(partnerPublicKey);
             byte[] bytes = bOut.toByteArray();
             try (OutputStream cOut = cPk.open(dataOutputStream, bytes.length)) {
@@ -125,43 +123,39 @@ public final class PGPHelper {
         }
     }
 
+    // Partner will be use your publicKey to encrypt data and You need to use private key to decrypt data.
     public String decrypt(byte[] encryptedData) throws Exception {
-        InputStream bais = new ByteArrayInputStream(encryptedData);
-        bais = PGPUtil.getDecoderStream(bais);
+        try (InputStream bais = PGPUtil.getDecoderStream(new ByteArrayInputStream(encryptedData))) {
+            PGPObjectFactory pgpF = new PGPObjectFactory(bais);
+            Object o = pgpF.nextObject();
+            PGPEncryptedDataList enc = (PGPEncryptedDataList) (o instanceof PGPEncryptedDataList ? o : pgpF.nextObject());
+            PGPPublicKeyEncryptedData publicKeyEncryptedData = (PGPPublicKeyEncryptedData) enc.getEncryptedDataObjects().next();
 
-        PGPObjectFactory pgpF = new PGPObjectFactory(bais);
-        PGPEncryptedDataList enc;
-        Object o = pgpF.nextObject();
-        if (o instanceof PGPEncryptedDataList) {
-            enc = (PGPEncryptedDataList) o;
-        } else {
-            enc = (PGPEncryptedDataList) pgpF.nextObject();
-        }
-        PGPPublicKeyEncryptedData publicKeyEncryptedData = (PGPPublicKeyEncryptedData) enc.getEncryptedDataObjects().next();
-
-        InputStream clear = publicKeyEncryptedData.getDataStream(this.myPgpPrivateKey, BOUNCY_CASTLE_PROVIDER);
-        PGPObjectFactory plainFact = new PGPObjectFactory(clear);
-        Object message = plainFact.nextObject();
-        if (message instanceof PGPCompressedData) {
-            PGPCompressedData cData = (PGPCompressedData) message;
-            PGPObjectFactory pgpFact = new PGPObjectFactory(cData.getDataStream());
-            message = pgpFact.nextObject();
-        }
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        if (message instanceof PGPLiteralData) {
-            PGPLiteralData ld = (PGPLiteralData) message;
-            InputStream unc = ld.getInputStream();
-            int ch;
-            while ((ch = unc.read()) >= 0) {
-                baos.write(ch);
+            InputStream clear = publicKeyEncryptedData.getDataStream(this.myPgpPrivateKey, BOUNCY_CASTLE_PROVIDER);
+            PGPObjectFactory plainFact = new PGPObjectFactory(clear);
+            Object message = plainFact.nextObject();
+            if (message instanceof PGPCompressedData) {
+                PGPCompressedData cData = (PGPCompressedData) message;
+                PGPObjectFactory pgpFact = new PGPObjectFactory(cData.getDataStream());
+                message = pgpFact.nextObject();
             }
-        } else if (message instanceof PGPOnePassSignatureList) {
-            throw new PGPException("encrypted message contains a signed message - not literal data.");
-        } else {
-            throw new PGPException("message is not a simple encrypted file - type unknown.");
+
+            if (message instanceof PGPLiteralData) {
+                try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+                    PGPLiteralData ld = (PGPLiteralData) message;
+                    InputStream unc = ld.getInputStream();
+                    int ch;
+                    while ((ch = unc.read()) >= 0) {
+                        out.write(ch);
+                    }
+                    return new String(out.toByteArray());
+                }
+            } else if (message instanceof PGPOnePassSignatureList) {
+                throw new PGPException("encrypted message contains a signed message - not literal data.");
+            } else {
+                throw new PGPException("message is not a simple encrypted file - type unknown.");
+            }
         }
-        return new String(baos.toByteArray());
     }
 
 

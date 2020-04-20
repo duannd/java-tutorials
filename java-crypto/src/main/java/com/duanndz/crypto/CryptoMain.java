@@ -17,7 +17,7 @@ public class CryptoMain {
     public static void main(String[] args) throws Exception {
         String myPrivateKeyFilePath = CryptoMain.class.getClassLoader().getResource("duanndz-sec.asc").getPath();
         LOGGER.info("My PGP secret key file path: {}", myPrivateKeyFilePath);
-        String partnerPublicKey = CryptoMain.class.getClassLoader().getResource("duanndz-pub.asc").getPath();
+        String partnerPublicKey = CryptoMain.class.getClassLoader().getResource("partner-pub.asc").getPath();
         LOGGER.info("Partner PGP public key file path: {}", partnerPublicKey);
         PGPHelper.init(partnerPublicKey, myPrivateKeyFilePath, "123456");
 
