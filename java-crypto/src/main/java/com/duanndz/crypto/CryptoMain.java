@@ -32,6 +32,12 @@ public class CryptoMain {
             // Decrypt data
             String decryptedData = PGPHelper.getInstance().decrypt(Base64.getDecoder().decode(encryptedDataInBase64));
             LOGGER.info("DecryptedData: {}, equals data: {}", decryptedData, data.equals(decryptedData));
+
+            // Signed Data
+            String pgpSignedData = PGPHelper.getInstance().sign(data.getBytes(StandardCharsets.UTF_8));
+            LOGGER.info("pgpSignedData : \n{}", pgpSignedData);
+            boolean isVerified = PGPHelper.getInstance().verifySign(Base64.getDecoder().decode(pgpSignedData));
+            LOGGER.info("isVerified : {}", isVerified);
         }
 
     }
