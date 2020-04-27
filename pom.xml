@@ -21,6 +21,7 @@
         <module>java-core</module>
         <module>apache-http-client</module>
         <module>java-crypto</module>
+        <module>java-regex</module>
     </modules>
 
     <packaging>pom</packaging>
