@@ -7,11 +7,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-public class MyCommandLineRunner implements CommandLineRunner {
+public class ProfileCommandLineRunner implements CommandLineRunner {
 
     private final ProfileService profileService;
 
-    public MyCommandLineRunner(ProfileService profileService) {
+    public ProfileCommandLineRunner(ProfileService profileService) {
         this.profileService = profileService;
     }
 
