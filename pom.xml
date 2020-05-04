@@ -22,6 +22,7 @@
         <module>apache-http-client</module>
         <module>java-crypto</module>
         <module>java-regex</module>
+        <module>springboot-mvc</module>
     </modules>
 
     <packaging>pom</packaging>
