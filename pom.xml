@@ -8,6 +8,7 @@
     <artifactId>java-tutorials</artifactId>
     <version>1.0-SNAPSHOT</version>
     <modules>
+        <module>common-model</module>
         <module>common-logback</module>
         <module>common-utils</module>
         <module>data-structure</module>
