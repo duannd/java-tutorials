@@ -60,6 +60,11 @@
                 <artifactId>common-logback</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.duanndz</groupId>
+                <artifactId>common-model</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
             <!-- SpringFox Swagger -->
             <dependency>
