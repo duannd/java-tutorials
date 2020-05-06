@@ -1,6 +1,8 @@
 package com.duanndz.springboot.mvc.controllers;
 
 import com.duanndz.models.User;
+import com.duanndz.springboot.mvc.exceptions.MvcErrorCode;
+import com.duanndz.springboot.mvc.exceptions.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,7 +44,11 @@ public class UserController {
     @GetMapping("{id}")
     public ResponseEntity<User> getUser(@PathVariable int id) {
         log.info("Get User by ID: {}", id);
-        return ResponseEntity.ok(USER_MAP.get(id));
+        User user = USER_MAP.get(id);
+        if (user == null) {
+            throw new UserNotFoundException(MvcErrorCode.ERR_USER_NOT_FOUND);
+        }
+        return ResponseEntity.ok(user);
     }
 
     // Update
@@ -51,7 +57,7 @@ public class UserController {
         log.info("Update User: {}", user);
         User oldUser = USER_MAP.get(user.getId());
         if (oldUser == null) {
-            return ResponseEntity.notFound().build();
+            throw new UserNotFoundException(MvcErrorCode.ERR_USER_NOT_FOUND);
         }
         oldUser.setFirstName(user.getFirstName());
         oldUser.setLastName(user.getLastName());
