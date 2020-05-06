@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * duan.nguyen
  * Datetime 5/5/20 16:37
+ * @see "https://mkyong.com/spring-boot/spring-rest-error-handling-example/"
  */
 @ControllerAdvice
 public class MvcControllerExceptionHandler extends ResponseEntityExceptionHandler {
