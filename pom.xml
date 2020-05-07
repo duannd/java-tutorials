@@ -11,6 +11,7 @@
         <module>common-model</module>
         <module>common-logback</module>
         <module>common-utils</module>
+        <module>common-domain</module>
         <module>data-structure</module>
         <module>design-pattern</module>
         <module>guava</module>
@@ -51,7 +52,7 @@
                 <scope>import</scope>
             </dependency>
 
-            <!-- Modules -->
+            <!-- Common Modules -->
             <dependency>
                 <groupId>com.duanndz</groupId>
                 <artifactId>common-utils</artifactId>
@@ -65,6 +66,11 @@
             <dependency>
                 <groupId>com.duanndz</groupId>
                 <artifactId>common-model</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.duanndz</groupId>
+                <artifactId>common-domain</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
