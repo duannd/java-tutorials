@@ -21,10 +21,10 @@
 
     <dependencies>
         <!-- Common modules -->
-<!--        <dependency>-->
-<!--            <groupId>com.duanndz</groupId>-->
-<!--            <artifactId>common-domain</artifactId>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>com.duanndz</groupId>
+            <artifactId>common-domain</artifactId>
+        </dependency>
 
         <!-- Spring Boot dependencies -->
         <dependency>

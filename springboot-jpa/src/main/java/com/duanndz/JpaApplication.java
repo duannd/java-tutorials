@@ -1,4 +1,4 @@
-package com.duanndz.jpa;
+package com.duanndz;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
