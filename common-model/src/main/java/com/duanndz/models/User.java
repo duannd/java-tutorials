@@ -18,11 +18,13 @@ import javax.validation.constraints.NotNull;
 public class User {
 
     private int id;
-    @NotNull
-    @NotBlank
+
+    @NotNull(message = "firstName must not be null")
+    @NotBlank(message = "firstName must not be blank")
     private String firstName;
-    @NotNull
-    @NotBlank
+
+    @NotNull(message = "lastName must not be null")
+    @NotBlank(message = "lastName must not be blank")
     private String lastName;
 
 }
