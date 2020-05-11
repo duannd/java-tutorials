@@ -1,4 +1,4 @@
-package com.duanndz.springboot.getstarted.config;
+package com.duanndz.springboot.getstarted.command;
 
 import com.duanndz.springboot.getstarted.profiles.ProfileService;
 import lombok.extern.slf4j.Slf4j;
