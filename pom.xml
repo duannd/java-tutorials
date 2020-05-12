@@ -27,6 +27,7 @@
         <module>springboot-mvc</module>
         <module>springboot-hazelcast</module>
         <module>springboot-jpa</module>
+        <module>springboot-quartz</module>
     </modules>
 
     <packaging>pom</packaging>
