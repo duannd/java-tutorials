@@ -28,6 +28,7 @@
         <module>springboot-hazelcast</module>
         <module>springboot-jpa</module>
         <module>springboot-quartz</module>
+        <module>apache-poi</module>
     </modules>
 
     <packaging>pom</packaging>
