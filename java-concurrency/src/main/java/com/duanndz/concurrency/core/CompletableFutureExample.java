@@ -26,8 +26,21 @@ public class CompletableFutureExample {
             log.info("Apply: {}", s);
             return null;
         });
-        String result = future1.get(30, TimeUnit.SECONDS);
-        log.info(result);
+
+        CompletableFuture<Void> task2 = CompletableFuture.runAsync(() -> {
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            log.info("Run Async task complete after 2s");
+        }).thenApply(s -> {
+            log.info("Task 2 DONE");
+            return null;
+        });
+//        String result = future1.get();
+//        log.info(result);
+//        task2.get();
     }
 
 }
