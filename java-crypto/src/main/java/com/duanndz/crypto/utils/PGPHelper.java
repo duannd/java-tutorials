@@ -30,7 +30,7 @@ public final class PGPHelper {
 
     static {
         try {
-            Security.addProvider(new BouncyCastleProvider());
+            // Security.addProvider(new BouncyCastleProvider());
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }

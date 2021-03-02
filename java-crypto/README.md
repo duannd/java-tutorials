@@ -12,3 +12,8 @@
     - Public key file
     - Pass phrase to read private key.
 3. PGPHelper Util Class
+
+4. Reference docs
+
+   - https://github.com/rodbate/bouncycastle-examples
+   - https://github.com/bcgit/bc-java/tree/master/pg/src/main/java/org/bouncycastle/openpgp/examples
