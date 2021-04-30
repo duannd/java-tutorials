@@ -12,7 +12,7 @@
     <artifactId>java-crypto</artifactId>
 
     <properties>
-        <org.bouncycastle.version>1.65</org.bouncycastle.version>
+        <org.bouncycastle.version>1.68</org.bouncycastle.version>
     </properties>
 
     <dependencies>
